@@ -1,0 +1,4145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyStudyTask Master - Academic Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #7209b7;
+            --success: #4cc9f0;
+            --warning: #ffb800;
+            --danger: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --student: #4361ee;
+            --instructor: #7209b7;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            font-size: 2rem;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        /* Login Section */
+        #login-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+            padding: 20px;
+        }
+        
+        .login-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-header h2 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .role-selector {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid var(--light-gray);
+        }
+        
+        .role-btn {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            background: var(--light);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .role-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #d11450;
+        }
+        
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background: #e6a500;
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #3ab3d9;
+        }
+        
+        .btn-sm {
+            padding: 8px 12px;
+            font-size: 0.9rem;
+        }
+        
+        /* Main Content Layout */
+        #main-app {
+            display: none;
+        }
+        
+        .main-content {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            flex: 0 0 250px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+        }
+        
+        .user-profile {
+            text-align: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--light-gray);
+            margin-bottom: 15px;
+        }
+        
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 10px;
+        }
+        
+        .user-role {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+        
+        .role-student {
+            background: #e6f0ff;
+            color: var(--student);
+        }
+        
+        .role-instructor {
+            background: #f2e6ff;
+            color: var(--instructor);
+        }
+        
+        .nav-links {
+            list-style: none;
+            margin-top: 20px;
+        }
+        
+        .nav-links li {
+            margin-bottom: 10px;
+        }
+        
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            color: var(--dark);
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Content Area Styles */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .stat-card {
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .stat-card h3 {
+            font-size: 2rem;
+            margin: 10px 0;
+            color: var(--secondary);
+        }
+        
+        /* Task List Styles */
+        .task-list {
+            list-style: none;
+        }
+        
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--light-gray);
+            transition: background-color 0.3s;
+        }
+        
+        .task-item:hover {
+            background-color: var(--light);
+        }
+        
+        .task-item:last-child {
+            border-bottom: none;
+        }
+        
+        .task-checkbox {
+            margin-right: 15px;
+        }
+        
+        .task-content {
+            flex: 1;
+        }
+        
+        .task-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .task-details {
+            display: flex;
+            gap: 15px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        
+        .task-priority {
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .priority-high {
+            background: #ffe6e6;
+            color: var(--danger);
+        }
+        
+        .priority-medium {
+            background: #fff4e6;
+            color: var(--warning);
+        }
+        
+        .priority-low {
+            background: #e6f7ff;
+            color: var(--success);
+        }
+        
+        .task-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* Calendar Styles */
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+        
+        .calendar-header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .calendar-day {
+            text-align: center;
+            padding: 5px;
+            font-weight: 600;
+            color: var(--gray);
+        }
+        
+        .calendar-date {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            position: relative;
+        }
+        
+        .calendar-date:hover {
+            background-color: var(--light);
+        }
+        
+        .calendar-date.has-tasks::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            width: 6px;
+            height: 6px;
+            background-color: var(--primary);
+            border-radius: 50%;
+        }
+        
+        .calendar-date.current {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        /* Modules/Courses Section */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .module-card {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            position: relative;
+        }
+        
+        .module-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .module-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .module-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .module-instructor {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .module-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        /* Form Styles */
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group-half {
+            flex: 1;
+        }
+        
+        select.form-control {
+            appearance: auto;
+        }
+        
+        /* Empty State Styles */
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: var(--gray);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--light-gray);
+        }
+        
+        /* Schedule Styles */
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+        
+        .schedule-day {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .schedule-day-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--light-gray);
+            text-align: center;
+        }
+        
+        .schedule-item {
+            background: var(--light);
+            padding: 8px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            border-left: 3px solid var(--primary);
+        }
+        
+        .schedule-item-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .schedule-item-time {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        /* Reminder Styles */
+        .reminder-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .reminder-item:last-child {
+            border-bottom: none;
+        }
+        
+        .reminder-content {
+            flex: 1;
+        }
+        
+        .reminder-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .reminder-details {
+            display: flex;
+            gap: 15px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .reminder-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* Settings Styles */
+        .settings-section {
+            margin-bottom: 30px;
+        }
+        
+        .settings-section h3 {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .settings-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .settings-option:last-child {
+            border-bottom: none;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+        
+        /* Focus Timer Styles */
+        .timer-container {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .timer-display {
+            font-size: 5rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: var(--primary);
+        }
+        
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .timer-presets {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .timer-preset {
+            padding: 8px 15px;
+            background: var(--light);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .timer-preset:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .timer-preset.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Activities Styles */
+        .activities-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--light-gray);
+            margin-bottom: 20px;
+        }
+        
+        .activity-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .activity-tab.active {
+            border-bottom: 3px solid var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .activities-content {
+            min-height: 300px;
+        }
+        
+        /* Dashboard Header */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .greeting {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .date-time {
+            text-align: right;
+        }
+        
+        .current-date {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .current-time {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+        
+        /* Footer Styles */
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+        
+        /* Progress Bar Styles */
+        .progress-container {
+            margin-top: 10px;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: var(--light-gray);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            transition: width 0.3s;
+        }
+        
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+        
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 15px 20px;
+            max-width: 350px;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .notification-message {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .notification-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                flex: 0 0 auto;
+            }
+            
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .schedule-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .date-time {
+                text-align: left;
+            }
+            
+            .timer-display {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h1>MyStudyTask Master</h1>
+                </div>
+                <div id="user-info" style="display: none;">
+                    <span id="user-name"></span>
+                    <button class="btn btn-primary" id="logout-btn">Log Out</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Login Section -->
+    <section id="login-section">
+        <div class="login-container">
+            <div class="login-header">
+                <h2>Welcome to MyStudyTask Master</h2>
+                <p>Please log in to continue</p>
+            </div>
+            
+            <div class="role-selector">
+                <div class="role-btn active" id="student-btn">Student</div>
+                <div class="role-btn" id="instructor-btn">Instructor</div>
+            </div>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Log In</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Main Application -->
+    <div id="main-app" class="container">
+        <div class="main-content">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <i class="fas fa-user-graduate" id="user-icon"></i>
+                    </div>
+                    <h2 id="profile-name">Student Name</h2>
+                    <p id="profile-major">Computer Science</p>
+                    <div class="user-role" id="profile-role">Student</div>
+                </div>
+                
+                <ul class="nav-links">
+                    <li><a href="#" class="nav-link active" data-target="dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#" class="nav-link" data-target="activities"><i class="fas fa-tasks"></i> Activities</a></li>
+                    <li><a href="#" class="nav-link" data-target="tasks"><i class="fas fa-check-circle"></i> My Tasks</a></li>
+                    <li><a href="#" class="nav-link" data-target="schedule"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
+                    <li><a href="#" class="nav-link" data-target="courses"><i class="fas fa-book"></i> Courses</a></li>
+                    <li><a href="#" class="nav-link" data-target="reminders"><i class="fas fa-bell"></i> Reminders</a></li>
+                    <li><a href="#" class="nav-link" data-target="focus-timer"><i class="fas fa-clock"></i> Focus Timer</a></li>
+                    <li><a href="#" class="nav-link" data-target="progress"><i class="fas fa-chart-line"></i> Progress</a></li>
+                    <li><a href="#" class="nav-link" data-target="settings"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </div>
+            
+            <!-- Content Area -->
+            <div class="content">
+                <!-- Dashboard Content -->
+                <div id="dashboard-content" class="content-section">
+                    <div class="dashboard-header">
+                        <div>
+                            <div class="greeting" id="greeting-text">Good Morning</div>
+                            <div class="current-date" id="current-date">Monday, October 23, 2023</div>
+                        </div>
+                        <div class="date-time">
+                            <div class="current-time" id="current-time">12:00:00 PM</div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-cards">
+                        <div class="card stat-card">
+                            <i class="fas fa-tasks"></i>
+                            <h3 id="pending-tasks-count">0</h3>
+                            <p>Pending Tasks</p>
+                        </div>
+                        
+                        <div class="card stat-card">
+                            <i class="fas fa-check-circle"></i>
+                            <h3 id="completed-tasks-count">0</h3>
+                            <p>Completed Tasks</p>
+                        </div>
+                        
+                        <div class="card stat-card">
+                            <i class="fas fa-calendar"></i>
+                            <h3 id="upcoming-deadlines-count">0</h3>
+                            <p>Upcoming Deadlines</p>
+                        </div>
+                        
+                        <div class="card stat-card">
+                            <i class="fas fa-book"></i>
+                            <h3 id="active-courses-count">0</h3>
+                            <p>Active Courses</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Modules/Courses Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">My Courses</h3>
+                            <button class="btn btn-primary" id="add-course-btn">Add Course</button>
+                        </div>
+                        <div id="courses-container" class="modules-grid">
+                            <div class="empty-state">
+                                <i class="fas fa-book-open"></i>
+                                <h3>No Courses Added</h3>
+                                <p>Add your first course to get started</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tasks Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Recent Tasks</h3>
+                            <button class="btn btn-primary" id="add-task-btn">Add New</button>
+                        </div>
+                        <ul id="tasks-container" class="task-list">
+                            <div class="empty-state">
+                                <i class="fas fa-tasks"></i>
+                                <h3>No Tasks Added</h3>
+                                <p>Add your first task to get started</p>
+                            </div>
+                        </ul>
+                    </div>
+                    
+                    <!-- Calendar Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title" id="calendar-month">October 2023</h3>
+                            <div>
+                                <button class="btn btn-primary" id="prev-month"><i class="fas fa-chevron-left"></i></button>
+                                <button class="btn btn-primary" id="next-month"><i class="fas fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+                        <div class="calendar" id="calendar-dates">
+                            <!-- Calendar will be generated dynamically -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Activities Content -->
+                <div id="activities-content" class="content-section" style="display: none;">
+                    <h2>My Activities</h2>
+                    <div class="card">
+                        <div class="activities-tabs">
+                            <div class="activity-tab active" data-tab="tasks">Tasks</div>
+                            <div class="activity-tab" data-tab="exams">Exams</div>
+                            <div class="activity-tab" data-tab="classes">Classes</div>
+                            <div class="activity-tab" data-tab="non-academic">Non-Academic</div>
+                        </div>
+                        <div class="activities-content">
+                            <div id="tasks-activities" class="activity-content">
+                                <div class="card-header">
+                                    <h3 class="card-title">All Tasks</h3>
+                                    <button class="btn btn-primary" id="add-task-btn-activities">Add New Task</button>
+                                </div>
+                                <ul id="all-tasks-container" class="task-list">
+                                    <div class="empty-state">
+                                        <i class="fas fa-tasks"></i>
+                                        <h3>No Tasks Added</h3>
+                                        <p>Add your first task to get started</p>
+                                    </div>
+                                </ul>
+                            </div>
+                            <div id="exams-activities" class="activity-content" style="display: none;">
+                                <div class="card-header">
+                                    <h3 class="card-title">Exams</h3>
+                                    <button class="btn btn-primary" id="add-exam-btn">Add Exam</button>
+                                </div>
+                                <div id="exams-container">
+                                    <div class="empty-state">
+                                        <i class="fas fa-file-alt"></i>
+                                        <h3>No Exams Added</h3>
+                                        <p>Add your first exam to get started</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="classes-activities" class="activity-content" style="display: none;">
+                                <div class="card-header">
+                                    <h3 class="card-title">Classes</h3>
+                                    <button class="btn btn-primary" id="add-class-btn">Add Class</button>
+                                </div>
+                                <div id="classes-container">
+                                    <div class="empty-state">
+                                        <i class="fas fa-chalkboard-teacher"></i>
+                                        <h3>No Classes Added</h3>
+                                        <p>Add your first class to get started</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="non-academic-activities" class="activity-content" style="display: none;">
+                                <div class="card-header">
+                                    <h3 class="card-title">Non-Academic Activities</h3>
+                                    <button class="btn btn-primary" id="add-non-academic-btn">Add Activity</button>
+                                </div>
+                                <div id="non-academic-container">
+                                    <div class="empty-state">
+                                        <i class="fas fa-running"></i>
+                                        <h3>No Non-Academic Activities</h3>
+                                        <p>Add your first non-academic activity</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tasks Content -->
+                <div id="tasks-content" class="content-section" style="display: none;">
+                    <h2>My Tasks</h2>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">All Tasks</h3>
+                            <button class="btn btn-primary" id="add-task-btn-full">Add New Task</button>
+                        </div>
+                        <ul id="all-tasks-page-container" class="task-list">
+                            <div class="empty-state">
+                                <i class="fas fa-tasks"></i>
+                                <h3>No Tasks Added</h3>
+                                <p>Add your first task to get started</p>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Schedule Content -->
+                <div id="schedule-content" class="content-section" style="display: none;">
+                    <h2>My Schedule</h2>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Weekly Schedule</h3>
+                            <button class="btn btn-primary" id="add-schedule-btn">Add Schedule Item</button>
+                        </div>
+                        <div id="schedule-container" class="schedule-grid">
+                            <div class="schedule-day">
+                                <div class="schedule-day-header">Monday</div>
+                                <div class="empty-state">
+                                    <p>No scheduled items</p>
+                                </div>
+                            </div>
+                            <div class="schedule-day">
+                                <div class="schedule-day-header">Tuesday</div>
+                                <div class="empty-state">
+                                    <p>No scheduled items</p>
+                                </div>
+                            </div>
+                            <div class="schedule-day">
+                                <div class="schedule-day-header">Wednesday</div>
+                                <div class="empty-state">
+                                    <p>No scheduled items</p>
+                                </div>
+                            </div>
+                            <div class="schedule-day">
+                                <div class="schedule-day-header">Thursday</div>
+                                <div class="empty-state">
+                                    <p>No scheduled items</p>
+                                </div>
+                            </div>
+                            <div class="schedule-day">
+                                <div class="schedule-day-header">Friday</div>
+                                <div class="empty-state">
+                                    <p>No scheduled items</p>
+                                </div>
+                            </div>
+                            <div class="schedule-day">
+                                <div class="schedule-day-header">Saturday</div>
+                                <div class="empty-state">
+                                    <p>No scheduled items</p>
+                                </div>
+                            </div>
+                            <div class="schedule-day">
+                                <div class="schedule-day-header">Sunday</div>
+                                <div class="empty-state">
+                                    <p>No scheduled items</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Courses Content -->
+                <div id="courses-content" class="content-section" style="display: none;">
+                    <h2>My Courses</h2>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">All Courses</h3>
+                            <button class="btn btn-primary" id="add-course-btn-full">Add New Course</button>
+                        </div>
+                        <div id="all-courses-container" class="modules-grid">
+                            <div class="empty-state">
+                                <i class="fas fa-book-open"></i>
+                                <h3>No Courses Added</h3>
+                                <p>Add your first course to get started</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Reminders Content -->
+                <div id="reminders-content" class="content-section" style="display: none;">
+                    <h2>My Reminders</h2>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">All Reminders</h3>
+                            <button class="btn btn-primary" id="add-reminder-btn">Add New Reminder</button>
+                        </div>
+                        <div id="reminders-container">
+                            <div class="empty-state">
+                                <i class="fas fa-bell"></i>
+                                <h3>No Reminders Added</h3>
+                                <p>Add your first reminder to get started</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Focus Timer Content -->
+                <div id="focus-timer-content" class="content-section" style="display: none;">
+                    <h2>Focus Timer</h2>
+                    <div class="card timer-container">
+                        <div class="timer-display" id="timer-display">25:00</div>
+                        <div class="timer-controls">
+                            <button class="btn btn-primary" id="start-timer">Start</button>
+                            <button class="btn btn-warning" id="pause-timer">Pause</button>
+                            <button class="btn btn-danger" id="reset-timer">Reset</button>
+                        </div>
+                        <div class="timer-presets">
+                            <div class="timer-preset active" data-minutes="25">25 min</div>
+                            <div class="timer-preset" data-minutes="15">15 min</div>
+                            <div class="timer-preset" data-minutes="45">45 min</div>
+                            <div class="timer-preset" data-minutes="60">60 min</div>
+                        </div>
+                        <div id="timer-status">Ready to focus!</div>
+                    </div>
+                </div>
+                
+                <!-- Progress Content -->
+                <div id="progress-content" class="content-section" style="display: none;">
+                    <h2>My Progress</h2>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Task Completion</h3>
+                        </div>
+                        <div id="progress-chart-container">
+                            <div class="empty-state">
+                                <i class="fas fa-chart-line"></i>
+                                <h3>No Progress Data</h3>
+                                <p>Complete some tasks to see your progress</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Task Progress</h3>
+                        </div>
+                        <div id="task-progress-container">
+                            <div class="empty-state">
+                                <i class="fas fa-tasks"></i>
+                                <h3>No Tasks with Progress</h3>
+                                <p>Update progress on your tasks to see them here</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Settings Content -->
+                <div id="settings-content" class="content-section" style="display: none;">
+                    <h2>Settings</h2>
+                    <div class="card">
+                        <div class="settings-section">
+                            <h3>Profile Settings</h3>
+                            <div class="form-group">
+                                <label for="profile-name-input">Full Name</label>
+                                <input type="text" id="profile-name-input" class="form-control" value="Student Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-major-input">Major/Department</label>
+                                <input type="text" id="profile-major-input" class="form-control" value="Computer Science">
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-email-input">Email</label>
+                                <input type="email" id="profile-email-input" class="form-control" value="student@example.com">
+                            </div>
+                            <button class="btn btn-primary" id="save-profile-btn">Save Profile</button>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h3>Notification Settings</h3>
+                            <div class="settings-option">
+                                <div>
+                                    <h4>Task Reminders</h4>
+                                    <p>Get notified about upcoming task deadlines</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="task-reminders-toggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="settings-option">
+                                <div>
+                                    <h4>Schedule Alerts</h4>
+                                    <p>Get notified about your daily schedule</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="schedule-alerts-toggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="settings-option">
+                                <div>
+                                    <h4>Reminder Sounds</h4>
+                                    <p>Play sound when reminders trigger</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="reminder-sounds-toggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h3>Appearance</h3>
+                            <div class="form-group">
+                                <label for="theme-select">Theme</label>
+                                <select id="theme-select" class="form-control">
+                                    <option value="light">Light</option>
+                                    <option value="dark">Dark</option>
+                                    <option value="auto">Auto (System)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h3>Data Management</h3>
+                            <button class="btn btn-primary" id="export-data-btn">Export Data</button>
+                            <button class="btn btn-warning" id="import-data-btn">Import Data</button>
+                            <button class="btn btn-danger" id="reset-data-btn">Reset All Data</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notification-container"></div>
+
+    <!-- Add Task Modal -->
+    <div class="modal" id="task-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="task-modal-title">Add New Task</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="task-form">
+                <input type="hidden" id="task-id">
+                <div class="form-group">
+                    <label for="task-title">Task Title</label>
+                    <input type="text" id="task-title" class="form-control" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group-half">
+                        <label for="task-course">Course</label>
+                        <select id="task-course" class="form-control" required>
+                            <option value="">Select a course</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group-half">
+                        <label for="task-type">Task Type</label>
+                        <select id="task-type" class="form-control" required>
+                            <option value="assignment">Assignment</option>
+                            <option value="meeting">Meeting</option>
+                            <option value="project">Project</option>
+                            <option value="reading">Reading</option>
+                            <option value="research">Research</option>
+                            <option value="presentation">Presentation</option>
+                            <option value="exam">Exam</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group-half">
+                        <label for="task-priority">Priority</label>
+                        <select id="task-priority" class="form-control" required>
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group-half">
+                        <label for="task-status">Status</label>
+                        <select id="task-status" class="form-control" required>
+                            <option value="pending">Pending</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group-half">
+                        <label for="task-due-date">Due Date</label>
+                        <input type="date" id="task-due-date" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group-half">
+                        <label for="task-due-time">Due Time (Optional)</label>
+                        <input type="time" id="task-due-time" class="form-control">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="task-notes">Notes (Optional)</label>
+                    <textarea id="task-notes" class="form-control" rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="task-progress">Progress (%)</label>
+                    <input type="range" id="task-progress" class="form-control" min="0" max="100" value="0">
+                    <div class="progress-text" id="task-progress-text">0%</div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Save Task</button>
+                <button type="button" class="btn btn-danger" id="delete-task-btn" style="display:none;">Delete Task</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Course Modal -->
+    <div class="modal" id="course-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="course-modal-title">Add New Course</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="course-form">
+                <input type="hidden" id="course-id">
+                <div class="form-group">
+                    <label for="course-name">Course Name</label>
+                    <input type="text" id="course-name" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="course-code">Course Code</label>
+                    <input type="text" id="course-code" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="course-instructor">Instructor</label>
+                    <input type="text" id="course-instructor" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="course-subject">Subject</label>
+                    <input type="text" id="course-subject" class="form-control" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group-half">
+                        <label for="course-color">Color Theme</label>
+                        <select id="course-color" class="form-control" required>
+                            <option value="#4361ee">Blue</option>
+                            <option value="#7209b7">Purple</option>
+                            <option value="#f72585">Pink</option>
+                            <option value="#4cc9f0">Cyan</option>
+                            <option value="#ffb800">Yellow</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group-half">
+                        <label for="course-icon">Icon</label>
+                        <select id="course-icon" class="form-control" required>
+                            <option value="fa-laptop-code">Computer</option>
+                            <option value="fa-database">Database</option>
+                            <option value="fa-calculator">Calculator</option>
+                            <option value="fa-flask">Science</option>
+                            <option value="fa-book">Book</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Save Course</button>
+                <button type="button" class="btn btn-danger" id="delete-course-btn" style="display:none;">Delete Course</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Schedule Modal -->
+    <div class="modal" id="schedule-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="schedule-modal-title">Add Schedule Item</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="schedule-form">
+                <input type="hidden" id="schedule-id">
+                <div class="form-group">
+                    <label for="schedule-title">Title</label>
+                    <input type="text" id="schedule-title" class="form-control" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group-half">
+                        <label for="schedule-day">Day</label>
+                        <select id="schedule-day" class="form-control" required>
+                            <option value="monday">Monday</option>
+                            <option value="tuesday">Tuesday</option>
+                            <option value="wednesday">Wednesday</option>
+                            <option value="thursday">Thursday</option>
+                            <option value="friday">Friday</option>
+                            <option value="saturday">Saturday</option>
+                            <option value="sunday">Sunday</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group-half">
+                        <label for="schedule-time">Time</label>
+                        <input type="time" id="schedule-time" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group-half">
+                        <label for="schedule-duration">Duration (minutes)</label>
+                        <input type="number" id="schedule-duration" class="form-control" value="60" min="15" step="15">
+                    </div>
+                    
+                    <div class="form-group-half">
+                        <label for="schedule-type">Type</label>
+                        <select id="schedule-type" class="form-control" required>
+                            <option value="class">Class</option>
+                            <option value="study">Study Session</option>
+                            <option value="meeting">Meeting</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="schedule-location">Location (Optional)</label>
+                    <input type="text" id="schedule-location" class="form-control">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Save Schedule Item</button>
+                <button type="button" class="btn btn-danger" id="delete-schedule-btn" style="display:none;">Delete Item</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Reminder Modal -->
+    <div class="modal" id="reminder-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="reminder-modal-title">Add Reminder</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="reminder-form">
+                <input type="hidden" id="reminder-id">
+                <div class="form-group">
+                    <label for="reminder-title">Reminder Title</label>
+                    <input type="text" id="reminder-title" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reminder-description">Description</label>
+                    <textarea id="reminder-description" class="form-control" rows="3"></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group-half">
+                        <label for="reminder-date">Date</label>
+                        <input type="date" id="reminder-date" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group-half">
+                        <label for="reminder-time">Time</label>
+                        <input type="time" id="reminder-time" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group-half">
+                        <label for="reminder-priority">Priority</label>
+                        <select id="reminder-priority" class="form-control" required>
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group-half">
+                        <label for="reminder-before">Remind Me Before</label>
+                        <select id="reminder-before" class="form-control" required>
+                            <option value="0">At the time</option>
+                            <option value="5">5 minutes before</option>
+                            <option value="15">15 minutes before</option>
+                            <option value="30">30 minutes before</option>
+                            <option value="60">1 hour before</option>
+                            <option value="1440">1 day before</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Save Reminder</button>
+                <button type="button" class="btn btn-danger" id="delete-reminder-btn" style="display:none;">Delete Reminder</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Exam Modal -->
+    <div class="modal" id="exam-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="exam-modal-title">Add Exam</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="exam-form">
+                <input type="hidden" id="exam-id">
+                <div class="form-group">
+                    <label for="exam-title">Exam Title</label>
+                    <input type="text" id="exam-title" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="exam-course">Course</label>
+                    <select id="exam-course" class="form-control" required>
+                        <option value="">Select a course</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group-half">
+                        <label for="exam-date">Exam Date</label>
+                        <input type="date" id="exam-date" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group-half">
+                        <label for="exam-time">Exam Time</label>
+                        <input type="time" id="exam-time" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group-half">
+                        <label for="exam-duration">Duration (minutes)</label>
+                        <input type="number" id="exam-duration" class="form-control" value="120" min="30" step="15">
+                    </div>
+                    
+                    <div class="form-group-half">
+                        <label for="exam-location">Location</label>
+                        <input type="text" id="exam-location" class="form-control">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="exam-notes">Notes (Optional)</label>
+                    <textarea id="exam-notes" class="form-control" rows="3"></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Save Exam</button>
+                <button type="button" class="btn btn-danger" id="delete-exam-btn" style="display:none;">Delete Exam</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Class Modal -->
+    <div class="modal" id="class-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="class-modal-title">Add Class</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="class-form">
+                <input type="hidden" id="class-id">
+                <div class="form-group">
+                    <label for="class-title">Class Title</label>
+                    <input type="text" id="class-title" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="class-course">Course</label>
+                    <select id="class-course" class="form-control" required>
+                        <option value="">Select a course</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group-half">
+                        <label for="class-day">Day</label>
+                        <select id="class-day" class="form-control" required>
+                            <option value="monday">Monday</option>
+                            <option value="tuesday">Tuesday</option>
+                            <option value="wednesday">Wednesday</option>
+                            <option value="thursday">Thursday</option>
+                            <option value="friday">Friday</option>
+                            <option value="saturday">Saturday</option>
+                            <option value="sunday">Sunday</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group-half">
+                        <label for="class-time">Time</label>
+                        <input type="time" id="class-time" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group-half">
+                        <label for="class-duration">Duration (minutes)</label>
+                        <input type="number" id="class-duration" class="form-control" value="60" min="30" step="15">
+                    </div>
+                    
+                    <div class="form-group-half">
+                        <label for="class-location">Location</label>
+                        <input type="text" id="class-location" class="form-control">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="class-instructor">Instructor</label>
+                    <input type="text" id="class-instructor" class="form-control">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Save Class</button>
+                <button type="button" class="btn btn-danger" id="delete-class-btn" style="display:none;">Delete Class</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Non-Academic Modal -->
+    <div class="modal" id="non-academic-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="non-academic-modal-title">Add Non-Academic Activity</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="non-academic-form">
+                <input type="hidden" id="non-academic-id">
+                <div class="form-group">
+                    <label for="non-academic-title">Activity Title</label>
+                    <input type="text" id="non-academic-title" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="non-academic-type">Activity Type</label>
+                    <select id="non-academic-type" class="form-control" required>
+                        <option value="sports">Sports</option>
+                        <option value="club">Club</option>
+                        <option value="social">Social</option>
+                        <option value="work">Work</option>
+                        <option value="hobby">Hobby</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group-half">
+                        <label for="non-academic-day">Day</label>
+                        <select id="non-academic-day" class="form-control" required>
+                            <option value="monday">Monday</option>
+                            <option value="tuesday">Tuesday</option>
+                            <option value="wednesday">Wednesday</option>
+                            <option value="thursday">Thursday</option>
+                            <option value="friday">Friday</option>
+                            <option value="saturday">Saturday</option>
+                            <option value="sunday">Sunday</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group-half">
+                        <label for="non-academic-time">Time</label>
+                        <input type="time" id="non-academic-time" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group-half">
+                        <label for="non-academic-duration">Duration (minutes)</label>
+                        <input type="number" id="non-academic-duration" class="form-control" value="60" min="15" step="15">
+                    </div>
+                    
+                    <div class="form-group-half">
+                        <label for="non-academic-location">Location</label>
+                        <input type="text" id="non-academic-location" class="form-control">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="non-academic-notes">Notes (Optional)</label>
+                    <textarea id="non-academic-notes" class="form-control" rows="3"></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Save Activity</button>
+                <button type="button" class="btn btn-danger" id="delete-non-academic-btn" style="display:none;">Delete Activity</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 MyStudyTask Master - Academic Task Management System</p>
+            <p>Designed for students to manage academic tasks efficiently</p>
+        </div>
+    </footer>
+
+    <script>
+        // Data Storage
+        let userData = {
+            tasks: [],
+            courses: [],
+            schedule: [],
+            reminders: [],
+            exams: [],
+            classes: [],
+            nonAcademic: [],
+            settings: {
+                taskReminders: true,
+                scheduleAlerts: true,
+                reminderSounds: true,
+                theme: 'light'
+            }
+        };
+
+        // Current date for calendar
+        let currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        let currentYear = currentDate.getFullYear();
+
+        // Timer variables
+        let timerInterval;
+        let timerMinutes = 25;
+        let timerSeconds = 0;
+        let timerRunning = false;
+
+        // Reminder checking interval
+        let reminderCheckInterval;
+
+        // DOM Elements
+        const loginSection = document.getElementById('login-section');
+        const mainApp = document.getElementById('main-app');
+        const loginForm = document.getElementById('login-form');
+        const studentBtn = document.getElementById('student-btn');
+        const instructorBtn = document.getElementById('instructor-btn');
+        const userInfo = document.getElementById('user-info');
+        const userName = document.getElementById('user-name');
+        const profileName = document.getElementById('profile-name');
+        const profileMajor = document.getElementById('profile-major');
+        const profileRole = document.getElementById('profile-role');
+        const userIcon = document.getElementById('user-icon');
+        const logoutBtn = document.getElementById('logout-btn');
+        
+        // Dashboard elements
+        const greetingText = document.getElementById('greeting-text');
+        const currentDateElement = document.getElementById('current-date');
+        const currentTimeElement = document.getElementById('current-time');
+        
+        // Content sections
+        const contentSections = document.querySelectorAll('.content-section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        // Dashboard elements
+        const pendingTasksCount = document.getElementById('pending-tasks-count');
+        const completedTasksCount = document.getElementById('completed-tasks-count');
+        const upcomingDeadlinesCount = document.getElementById('upcoming-deadlines-count');
+        const activeCoursesCount = document.getElementById('active-courses-count');
+        const coursesContainer = document.getElementById('courses-container');
+        const tasksContainer = document.getElementById('tasks-container');
+        
+        // Calendar elements
+        const calendarMonth = document.getElementById('calendar-month');
+        const calendarDates = document.getElementById('calendar-dates');
+        const prevMonthBtn = document.getElementById('prev-month');
+        const nextMonthBtn = document.getElementById('next-month');
+        
+        // Modal elements
+        const taskModal = document.getElementById('task-modal');
+        const courseModal = document.getElementById('course-modal');
+        const scheduleModal = document.getElementById('schedule-modal');
+        const reminderModal = document.getElementById('reminder-modal');
+        const examModal = document.getElementById('exam-modal');
+        const classModal = document.getElementById('class-modal');
+        const nonAcademicModal = document.getElementById('non-academic-modal');
+        const taskForm = document.getElementById('task-form');
+        const courseForm = document.getElementById('course-form');
+        const scheduleForm = document.getElementById('schedule-form');
+        const reminderForm = document.getElementById('reminder-form');
+        const examForm = document.getElementById('exam-form');
+        const classForm = document.getElementById('class-form');
+        const nonAcademicForm = document.getElementById('non-academic-form');
+        const addTaskBtn = document.getElementById('add-task-btn');
+        const addTaskBtnFull = document.getElementById('add-task-btn-full');
+        const addTaskBtnActivities = document.getElementById('add-task-btn-activities');
+        const addCourseBtn = document.getElementById('add-course-btn');
+        const addCourseBtnFull = document.getElementById('add-course-btn-full');
+        const addScheduleBtn = document.getElementById('add-schedule-btn');
+        const addReminderBtn = document.getElementById('add-reminder-btn');
+        const addExamBtn = document.getElementById('add-exam-btn');
+        const addClassBtn = document.getElementById('add-class-btn');
+        const addNonAcademicBtn = document.getElementById('add-non-academic-btn');
+        const closeModalBtns = document.querySelectorAll('.close-modal');
+        const taskCourseSelect = document.getElementById('task-course');
+        const examCourseSelect = document.getElementById('exam-course');
+        const classCourseSelect = document.getElementById('class-course');
+        
+        // Timer elements
+        const timerDisplay = document.getElementById('timer-display');
+        const startTimerBtn = document.getElementById('start-timer');
+        const pauseTimerBtn = document.getElementById('pause-timer');
+        const resetTimerBtn = document.getElementById('reset-timer');
+        const timerPresets = document.querySelectorAll('.timer-preset');
+        const timerStatus = document.getElementById('timer-status');
+        
+        // Activities elements
+        const activityTabs = document.querySelectorAll('.activity-tab');
+        const activityContents = document.querySelectorAll('.activity-content');
+        
+        // Settings elements
+        const profileNameInput = document.getElementById('profile-name-input');
+        const profileMajorInput = document.getElementById('profile-major-input');
+        const profileEmailInput = document.getElementById('profile-email-input');
+        const saveProfileBtn = document.getElementById('save-profile-btn');
+        const taskRemindersToggle = document.getElementById('task-reminders-toggle');
+        const scheduleAlertsToggle = document.getElementById('schedule-alerts-toggle');
+        const reminderSoundsToggle = document.getElementById('reminder-sounds-toggle');
+        const themeSelect = document.getElementById('theme-select');
+        const exportDataBtn = document.getElementById('export-data-btn');
+        const importDataBtn = document.getElementById('import-data-btn');
+        const resetDataBtn = document.getElementById('reset-data-btn');
+
+        // Progress elements
+        const taskProgressContainer = document.getElementById('task-progress-container');
+
+        // Initialize application
+        function initApp() {
+            loadData();
+            updateDateTime();
+            updateDashboard();
+            renderCourses();
+            renderAllCourses();
+            renderTasks();
+            renderAllTasks();
+            renderSchedule();
+            renderReminders();
+            renderExams();
+            renderClasses();
+            renderNonAcademic();
+            renderCalendar();
+            renderTaskProgress();
+            loadSettings();
+            setupEventListeners();
+            startReminderChecker();
+            
+            // Start updating time every second
+            setInterval(updateDateTime, 1000);
+        }
+
+        // Update date and time
+        function updateDateTime() {
+            const now = new Date();
+            
+            // Update greeting based on time of day
+            const hour = now.getHours();
+            if (hour < 12) {
+                greetingText.textContent = 'Good Morning';
+            } else if (hour < 18) {
+                greetingText.textContent = 'Good Afternoon';
+            } else {
+                greetingText.textContent = 'Good Evening';
+            }
+            
+            // Update date
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            currentDateElement.textContent = now.toLocaleDateString(undefined, options);
+            
+            // Update time
+            currentTimeElement.textContent = now.toLocaleTimeString();
+        }
+
+        // Load data from localStorage
+        function loadData() {
+            const savedData = localStorage.getItem('mystudytask_data');
+            if (savedData) {
+                userData = JSON.parse(savedData);
+            }
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('mystudytask_data', JSON.stringify(userData));
+        }
+
+        // Update dashboard statistics
+        function updateDashboard() {
+            const pendingTasks = userData.tasks.filter(task => task.status === 'pending').length;
+            const completedTasks = userData.tasks.filter(task => task.status === 'completed').length;
+            
+            // Calculate upcoming deadlines (within next 7 days)
+            const today = new Date();
+            const nextWeek = new Date();
+            nextWeek.setDate(today.getDate() + 7);
+            
+            const upcomingDeadlines = userData.tasks.filter(task => {
+                if (task.status === 'completed') return false;
+                
+                const dueDate = new Date(task.dueDate);
+                return dueDate >= today && dueDate <= nextWeek;
+            }).length;
+            
+            pendingTasksCount.textContent = pendingTasks;
+            completedTasksCount.textContent = completedTasks;
+            upcomingDeadlinesCount.textContent = upcomingDeadlines;
+            activeCoursesCount.textContent = userData.courses.length;
+        }
+
+        // Render courses in the dashboard
+        function renderCourses() {
+            if (userData.courses.length === 0) {
+                coursesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-book-open"></i>
+                        <h3>No Courses Added</h3>
+                        <p>Add your first course to get started</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            coursesContainer.innerHTML = '';
+            userData.courses.slice(0, 4).forEach(course => { // Show only 4 courses on dashboard
+                const courseElement = document.createElement('div');
+                courseElement.className = 'module-card';
+                courseElement.style.background = `linear-gradient(135deg, ${course.color}, ${adjustColor(course.color, -40)})`;
+                courseElement.innerHTML = `
+                    <div class="module-actions">
+                        <button class="btn btn-sm btn-warning edit-course" data-id="${course.id}"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-sm btn-danger delete-course" data-id="${course.id}"><i class="fas fa-trash"></i></button>
+                    </div>
+                    <div class="module-icon">
+                        <i class="fas ${course.icon}"></i>
+                    </div>
+                    <h3 class="module-title">${course.name}</h3>
+                    <p class="module-instructor">${course.instructor}</p>
+                `;
+                coursesContainer.appendChild(courseElement);
+            });
+            
+            // Update course select in task form
+            updateCourseSelect();
+            
+            // Add event listeners to course action buttons
+            document.querySelectorAll('.edit-course').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const courseId = btn.dataset.id;
+                    editCourse(courseId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-course').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const courseId = btn.dataset.id;
+                    deleteCourse(courseId);
+                });
+            });
+        }
+
+        // Render all courses in the courses section
+        function renderAllCourses() {
+            const allCoursesContainer = document.getElementById('all-courses-container');
+            
+            if (userData.courses.length === 0) {
+                allCoursesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-book-open"></i>
+                        <h3>No Courses Added</h3>
+                        <p>Add your first course to get started</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            allCoursesContainer.innerHTML = '';
+            userData.courses.forEach(course => {
+                const courseElement = document.createElement('div');
+                courseElement.className = 'module-card';
+                courseElement.style.background = `linear-gradient(135deg, ${course.color}, ${adjustColor(course.color, -40)})`;
+                courseElement.innerHTML = `
+                    <div class="module-actions">
+                        <button class="btn btn-sm btn-warning edit-course" data-id="${course.id}"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-sm btn-danger delete-course" data-id="${course.id}"><i class="fas fa-trash"></i></button>
+                    </div>
+                    <div class="module-icon">
+                        <i class="fas ${course.icon}"></i>
+                    </div>
+                    <h3 class="module-title">${course.name}</h3>
+                    <p class="module-instructor">${course.instructor}</p>
+                    <p class="module-code">${course.code}</p>
+                `;
+                allCoursesContainer.appendChild(courseElement);
+            });
+            
+            // Add event listeners to course action buttons
+            document.querySelectorAll('.edit-course').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const courseId = btn.dataset.id;
+                    editCourse(courseId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-course').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const courseId = btn.dataset.id;
+                    deleteCourse(courseId);
+                });
+            });
+        }
+
+        // Helper function to adjust color brightness
+        function adjustColor(hex, amount) {
+            let r = parseInt(hex.substring(1, 3), 16);
+            let g = parseInt(hex.substring(3, 5), 16);
+            let b = parseInt(hex.substring(5, 7), 16);
+            
+            r = Math.max(0, Math.min(255, r + amount));
+            g = Math.max(0, Math.min(255, g + amount));
+            b = Math.max(0, Math.min(255, b + amount));
+            
+            return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+        }
+
+        // Update course select dropdown
+        function updateCourseSelect() {
+            taskCourseSelect.innerHTML = '<option value="">Select a course</option>';
+            examCourseSelect.innerHTML = '<option value="">Select a course</option>';
+            classCourseSelect.innerHTML = '<option value="">Select a course</option>';
+            
+            userData.courses.forEach(course => {
+                const option = document.createElement('option');
+                option.value = course.id;
+                option.textContent = course.name;
+                taskCourseSelect.appendChild(option.cloneNode(true));
+                examCourseSelect.appendChild(option.cloneNode(true));
+                classCourseSelect.appendChild(option.cloneNode(true));
+            });
+        }
+
+        // Render tasks in the dashboard
+        function renderTasks() {
+            if (userData.tasks.length === 0) {
+                tasksContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-tasks"></i>
+                        <h3>No Tasks Added</h3>
+                        <p>Add your first task to get started</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort tasks by due date (soonest first) and priority
+            const sortedTasks = [...userData.tasks].sort((a, b) => {
+                // First sort by completion status (pending first)
+                if (a.status !== b.status) {
+                    return a.status === 'pending' ? -1 : 1;
+                }
+                
+                // Then by due date
+                const dateA = new Date(a.dueDate);
+                const dateB = new Date(b.dueDate);
+                if (dateA.getTime() !== dateB.getTime()) {
+                    return dateA - dateB;
+                }
+                
+                // Finally by priority (high to low)
+                const priorityOrder = { high: 3, medium: 2, low: 1 };
+                return priorityOrder[b.priority] - priorityOrder[a.priority];
+            });
+            
+            tasksContainer.innerHTML = '';
+            sortedTasks.slice(0, 5).forEach(task => { // Show only 5 most recent tasks
+                const taskElement = document.createElement('li');
+                taskElement.className = 'task-item';
+                
+                const course = userData.courses.find(c => c.id === task.courseId);
+                const courseName = course ? course.name : 'Unassigned';
+                
+                const dueDate = new Date(task.dueDate);
+                const today = new Date();
+                const tomorrow = new Date();
+                tomorrow.setDate(today.getDate() + 1);
+                
+                let dueText = '';
+                if (dueDate.toDateString() === today.toDateString()) {
+                    dueText = 'Due: Today';
+                } else if (dueDate.toDateString() === tomorrow.toDateString()) {
+                    dueText = 'Due: Tomorrow';
+                } else {
+                    dueText = `Due: ${dueDate.toLocaleDateString()}`;
+                }
+                
+                taskElement.innerHTML = `
+                    <input type="checkbox" class="task-checkbox" ${task.status === 'completed' ? 'checked' : ''} data-id="${task.id}">
+                    <div class="task-content">
+                        <div class="task-title">${task.title}</div>
+                        <div class="task-details">
+                            <span><i class="fas fa-book"></i> ${courseName}</span>
+                            <span><i class="fas fa-tag"></i> ${task.type}</span>
+                            <span><i class="fas fa-clock"></i> ${dueText}</span>
+                            <span class="task-priority priority-${task.priority}">${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)} Priority</span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${task.progress || 0}%"></div>
+                            </div>
+                            <div class="progress-text">Progress: ${task.progress || 0}%</div>
+                        </div>
+                    </div>
+                    <div class="task-actions">
+                        <button class="btn btn-sm btn-warning edit-task" data-id="${task.id}"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-sm btn-danger delete-task" data-id="${task.id}"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                
+                if (task.status === 'completed') {
+                    taskElement.style.opacity = '0.6';
+                    taskElement.style.textDecoration = 'line-through';
+                }
+                
+                tasksContainer.appendChild(taskElement);
+            });
+            
+            // Add event listeners to task action buttons
+            document.querySelectorAll('.edit-task').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const taskId = btn.dataset.id;
+                    editTask(taskId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-task').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const taskId = btn.dataset.id;
+                    deleteTask(taskId);
+                });
+            });
+            
+            // Add event listeners to checkboxes
+            document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', handleTaskStatusChange);
+            });
+        }
+
+        // Render all tasks in the tasks section
+        function renderAllTasks() {
+            const allTasksContainer = document.getElementById('all-tasks-container');
+            const allTasksPageContainer = document.getElementById('all-tasks-page-container');
+            
+            if (userData.tasks.length === 0) {
+                allTasksContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-tasks"></i>
+                        <h3>No Tasks Added</h3>
+                        <p>Add your first task to get started</p>
+                    </div>
+                `;
+                allTasksPageContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-tasks"></i>
+                        <h3>No Tasks Added</h3>
+                        <p>Add your first task to get started</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort tasks by due date (soonest first) and priority
+            const sortedTasks = [...userData.tasks].sort((a, b) => {
+                // First sort by completion status (pending first)
+                if (a.status !== b.status) {
+                    return a.status === 'pending' ? -1 : 1;
+                }
+                
+                // Then by due date
+                const dateA = new Date(a.dueDate);
+                const dateB = new Date(b.dueDate);
+                if (dateA.getTime() !== dateB.getTime()) {
+                    return dateA - dateB;
+                }
+                
+                // Finally by priority (high to low)
+                const priorityOrder = { high: 3, medium: 2, low: 1 };
+                return priorityOrder[b.priority] - priorityOrder[a.priority];
+            });
+            
+            allTasksContainer.innerHTML = '';
+            allTasksPageContainer.innerHTML = '';
+            
+            sortedTasks.forEach(task => {
+                const taskElement = document.createElement('li');
+                taskElement.className = 'task-item';
+                
+                const course = userData.courses.find(c => c.id === task.courseId);
+                const courseName = course ? course.name : 'Unassigned';
+                
+                const dueDate = new Date(task.dueDate);
+                const today = new Date();
+                const tomorrow = new Date();
+                tomorrow.setDate(today.getDate() + 1);
+                
+                let dueText = '';
+                if (dueDate.toDateString() === today.toDateString()) {
+                    dueText = 'Due: Today';
+                } else if (dueDate.toDateString() === tomorrow.toDateString()) {
+                    dueText = 'Due: Tomorrow';
+                } else {
+                    dueText = `Due: ${dueDate.toLocaleDateString()}`;
+                }
+                
+                taskElement.innerHTML = `
+                    <input type="checkbox" class="task-checkbox" ${task.status === 'completed' ? 'checked' : ''} data-id="${task.id}">
+                    <div class="task-content">
+                        <div class="task-title">${task.title}</div>
+                        <div class="task-details">
+                            <span><i class="fas fa-book"></i> ${courseName}</span>
+                            <span><i class="fas fa-tag"></i> ${task.type}</span>
+                            <span><i class="fas fa-clock"></i> ${dueText}</span>
+                            <span class="task-priority priority-${task.priority}">${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)} Priority</span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${task.progress || 0}%"></div>
+                            </div>
+                            <div class="progress-text">Progress: ${task.progress || 0}%</div>
+                        </div>
+                    </div>
+                    <div class="task-actions">
+                        <button class="btn btn-sm btn-warning edit-task" data-id="${task.id}"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-sm btn-danger delete-task" data-id="${task.id}"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                
+                if (task.status === 'completed') {
+                    taskElement.style.opacity = '0.6';
+                    taskElement.style.textDecoration = 'line-through';
+                }
+                
+                allTasksContainer.appendChild(taskElement.cloneNode(true));
+                allTasksPageContainer.appendChild(taskElement);
+            });
+            
+            // Add event listeners to task action buttons
+            document.querySelectorAll('.edit-task').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const taskId = btn.dataset.id;
+                    editTask(taskId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-task').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const taskId = btn.dataset.id;
+                    deleteTask(taskId);
+                });
+            });
+            
+            // Add event listeners to checkboxes
+            document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', handleTaskStatusChange);
+            });
+        }
+
+        // Handle task status change (complete/incomplete)
+        function handleTaskStatusChange(e) {
+            const taskId = e.target.dataset.id;
+            const task = userData.tasks.find(t => t.id === taskId);
+            
+            if (task) {
+                task.status = e.target.checked ? 'completed' : 'pending';
+                saveData();
+                renderTasks();
+                renderAllTasks();
+                renderTaskProgress();
+                updateDashboard();
+            }
+        }
+
+        // Render schedule
+        function renderSchedule() {
+            const scheduleContainer = document.getElementById('schedule-container');
+            const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+            
+            days.forEach(day => {
+                const dayElement = scheduleContainer.querySelector(`.schedule-day:nth-child(${days.indexOf(day) + 1})`);
+                const scheduleItems = userData.schedule.filter(item => item.day === day);
+                
+                // Clear existing items except the header
+                const header = dayElement.querySelector('.schedule-day-header');
+                dayElement.innerHTML = '';
+                dayElement.appendChild(header);
+                
+                if (scheduleItems.length === 0) {
+                    const emptyState = document.createElement('div');
+                    emptyState.className = 'empty-state';
+                    emptyState.innerHTML = '<p>No scheduled items</p>';
+                    dayElement.appendChild(emptyState);
+                } else {
+                    // Sort schedule items by time
+                    scheduleItems.sort((a, b) => {
+                        const timeA = a.time;
+                        const timeB = b.time;
+                        return timeA.localeCompare(timeB);
+                    });
+                    
+                    scheduleItems.forEach(item => {
+                        const scheduleItem = document.createElement('div');
+                        scheduleItem.className = 'schedule-item';
+                        scheduleItem.innerHTML = `
+                            <div class="schedule-item-title">${item.title}</div>
+                            <div class="schedule-item-time">${formatTime(item.time)} - ${calculateEndTime(item.time, item.duration)}</div>
+                            <div class="schedule-item-type">${item.type}</div>
+                            ${item.location ? `<div class="schedule-item-location">${item.location}</div>` : ''}
+                            <div class="task-actions">
+                                <button class="btn btn-sm btn-warning edit-schedule" data-id="${item.id}"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-sm btn-danger delete-schedule" data-id="${item.id}"><i class="fas fa-trash"></i></button>
+                            </div>
+                        `;
+                        dayElement.appendChild(scheduleItem);
+                    });
+                }
+            });
+            
+            // Add event listeners to schedule action buttons
+            document.querySelectorAll('.edit-schedule').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const scheduleId = btn.dataset.id;
+                    editSchedule(scheduleId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-schedule').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const scheduleId = btn.dataset.id;
+                    deleteSchedule(scheduleId);
+                });
+            });
+        }
+
+        // Helper function to format time
+        function formatTime(timeString) {
+            const [hours, minutes] = timeString.split(':');
+            const hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const formattedHour = hour % 12 || 12;
+            return `${formattedHour}:${minutes} ${ampm}`;
+        }
+
+        // Helper function to calculate end time
+        function calculateEndTime(startTime, duration) {
+            const [hours, minutes] = startTime.split(':');
+            const startDate = new Date();
+            startDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+            
+            const endDate = new Date(startDate.getTime() + duration * 60000);
+            const endHours = endDate.getHours();
+            const endMinutes = endDate.getMinutes().toString().padStart(2, '0');
+            const ampm = endHours >= 12 ? 'PM' : 'AM';
+            const formattedHour = endHours % 12 || 12;
+            
+            return `${formattedHour}:${endMinutes} ${ampm}`;
+        }
+
+        // Render reminders
+        function renderReminders() {
+            const remindersContainer = document.getElementById('reminders-container');
+            
+            if (userData.reminders.length === 0) {
+                remindersContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-bell"></i>
+                        <h3>No Reminders Added</h3>
+                        <p>Add your first reminder to get started</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort reminders by date and time (soonest first)
+            const sortedReminders = [...userData.reminders].sort((a, b) => {
+                const dateA = new Date(`${a.date}T${a.time}`);
+                const dateB = new Date(`${b.date}T${b.time}`);
+                return dateA - dateB;
+            });
+            
+            remindersContainer.innerHTML = '';
+            sortedReminders.forEach(reminder => {
+                const reminderElement = document.createElement('div');
+                reminderElement.className = 'reminder-item';
+                
+                const reminderDate = new Date(`${reminder.date}T${reminder.time}`);
+                const today = new Date();
+                const tomorrow = new Date();
+                tomorrow.setDate(today.getDate() + 1);
+                
+                let dateText = '';
+                if (reminderDate.toDateString() === today.toDateString()) {
+                    dateText = 'Today';
+                } else if (reminderDate.toDateString() === tomorrow.toDateString()) {
+                    dateText = 'Tomorrow';
+                } else {
+                    dateText = reminderDate.toLocaleDateString();
+                }
+                
+                const timeText = formatTime(reminder.time);
+                
+                reminderElement.innerHTML = `
+                    <div class="reminder-content">
+                        <div class="reminder-title">${reminder.title}</div>
+                        <div class="reminder-details">
+                            <span><i class="fas fa-calendar"></i> ${dateText}</span>
+                            <span><i class="fas fa-clock"></i> ${timeText}</span>
+                            <span class="task-priority priority-${reminder.priority}">${reminder.priority.charAt(0).toUpperCase() + reminder.priority.slice(1)} Priority</span>
+                        </div>
+                        ${reminder.description ? `<p>${reminder.description}</p>` : ''}
+                        <div class="reminder-details">
+                            <span><i class="fas fa-bell"></i> Remind ${getRemindBeforeText(reminder.before)}</span>
+                        </div>
+                    </div>
+                    <div class="reminder-actions">
+                        <button class="btn btn-sm btn-warning edit-reminder" data-id="${reminder.id}"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-sm btn-danger delete-reminder" data-id="${reminder.id}"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                
+                remindersContainer.appendChild(reminderElement);
+            });
+            
+            // Add event listeners to reminder action buttons
+            document.querySelectorAll('.edit-reminder').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const reminderId = btn.dataset.id;
+                    editReminder(reminderId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-reminder').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const reminderId = btn.dataset.id;
+                    deleteReminder(reminderId);
+                });
+            });
+        }
+
+        // Helper function to get remind before text
+        function getRemindBeforeText(minutes) {
+            if (minutes === 0) return 'at the time';
+            if (minutes === 5) return '5 minutes before';
+            if (minutes === 15) return '15 minutes before';
+            if (minutes === 30) return '30 minutes before';
+            if (minutes === 60) return '1 hour before';
+            if (minutes === 1440) return '1 day before';
+            return `${minutes} minutes before`;
+        }
+
+        // Render exams
+        function renderExams() {
+            const examsContainer = document.getElementById('exams-container');
+            
+            if (userData.exams.length === 0) {
+                examsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-file-alt"></i>
+                        <h3>No Exams Added</h3>
+                        <p>Add your first exam to get started</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort exams by date and time (soonest first)
+            const sortedExams = [...userData.exams].sort((a, b) => {
+                const dateA = new Date(`${a.date}T${a.time}`);
+                const dateB = new Date(`${b.date}T${b.time}`);
+                return dateA - dateB;
+            });
+            
+            examsContainer.innerHTML = '';
+            sortedExams.forEach(exam => {
+                const examElement = document.createElement('div');
+                examElement.className = 'task-item';
+                
+                const course = userData.courses.find(c => c.id === exam.courseId);
+                const courseName = course ? course.name : 'Unassigned';
+                
+                const examDate = new Date(`${exam.date}T${exam.time}`);
+                const today = new Date();
+                const tomorrow = new Date();
+                tomorrow.setDate(today.getDate() + 1);
+                
+                let dateText = '';
+                if (examDate.toDateString() === today.toDateString()) {
+                    dateText = 'Today';
+                } else if (examDate.toDateString() === tomorrow.toDateString()) {
+                    dateText = 'Tomorrow';
+                } else {
+                    dateText = examDate.toLocaleDateString();
+                }
+                
+                const timeText = formatTime(exam.time);
+                
+                examElement.innerHTML = `
+                    <div class="task-content">
+                        <div class="task-title">${exam.title}</div>
+                        <div class="task-details">
+                            <span><i class="fas fa-book"></i> ${courseName}</span>
+                            <span><i class="fas fa-calendar"></i> ${dateText}</span>
+                            <span><i class="fas fa-clock"></i> ${timeText}</span>
+                            <span><i class="fas fa-hourglass-half"></i> ${exam.duration} minutes</span>
+                            ${exam.location ? `<span><i class="fas fa-map-marker-alt"></i> ${exam.location}</span>` : ''}
+                        </div>
+                        ${exam.notes ? `<p>${exam.notes}</p>` : ''}
+                    </div>
+                    <div class="task-actions">
+                        <button class="btn btn-sm btn-warning edit-exam" data-id="${exam.id}"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-sm btn-danger delete-exam" data-id="${exam.id}"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                
+                examsContainer.appendChild(examElement);
+            });
+            
+            // Add event listeners to exam action buttons
+            document.querySelectorAll('.edit-exam').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const examId = btn.dataset.id;
+                    editExam(examId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-exam').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const examId = btn.dataset.id;
+                    deleteExam(examId);
+                });
+            });
+        }
+
+        // Render classes
+        function renderClasses() {
+            const classesContainer = document.getElementById('classes-container');
+            
+            if (userData.classes.length === 0) {
+                classesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <h3>No Classes Added</h3>
+                        <p>Add your first class to get started</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort classes by day and time
+            const daysOrder = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+            const sortedClasses = [...userData.classes].sort((a, b) => {
+                const dayComparison = daysOrder.indexOf(a.day) - daysOrder.indexOf(b.day);
+                if (dayComparison !== 0) return dayComparison;
+                return a.time.localeCompare(b.time);
+            });
+            
+            classesContainer.innerHTML = '';
+            sortedClasses.forEach(classItem => {
+                const classElement = document.createElement('div');
+                classElement.className = 'task-item';
+                
+                const course = userData.courses.find(c => c.id === classItem.courseId);
+                const courseName = course ? course.name : 'Unassigned';
+                
+                const timeText = formatTime(classItem.time);
+                const endTime = calculateEndTime(classItem.time, classItem.duration);
+                
+                classElement.innerHTML = `
+                    <div class="task-content">
+                        <div class="task-title">${classItem.title}</div>
+                        <div class="task-details">
+                            <span><i class="fas fa-book"></i> ${courseName}</span>
+                            <span><i class="fas fa-calendar"></i> ${classItem.day.charAt(0).toUpperCase() + classItem.day.slice(1)}</span>
+                            <span><i class="fas fa-clock"></i> ${timeText} - ${endTime}</span>
+                            <span><i class="fas fa-hourglass-half"></i> ${classItem.duration} minutes</span>
+                            ${classItem.location ? `<span><i class="fas fa-map-marker-alt"></i> ${classItem.location}</span>` : ''}
+                            ${classItem.instructor ? `<span><i class="fas fa-user"></i> ${classItem.instructor}</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="task-actions">
+                        <button class="btn btn-sm btn-warning edit-class" data-id="${classItem.id}"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-sm btn-danger delete-class" data-id="${classItem.id}"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                
+                classesContainer.appendChild(classElement);
+            });
+            
+            // Add event listeners to class action buttons
+            document.querySelectorAll('.edit-class').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const classId = btn.dataset.id;
+                    editClass(classId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-class').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const classId = btn.dataset.id;
+                    deleteClass(classId);
+                });
+            });
+        }
+
+        // Render non-academic activities
+        function renderNonAcademic() {
+            const nonAcademicContainer = document.getElementById('non-academic-container');
+            
+            if (userData.nonAcademic.length === 0) {
+                nonAcademicContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-running"></i>
+                        <h3>No Non-Academic Activities</h3>
+                        <p>Add your first non-academic activity</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort activities by day and time
+            const daysOrder = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+            const sortedActivities = [...userData.nonAcademic].sort((a, b) => {
+                const dayComparison = daysOrder.indexOf(a.day) - daysOrder.indexOf(b.day);
+                if (dayComparison !== 0) return dayComparison;
+                return a.time.localeCompare(b.time);
+            });
+            
+            nonAcademicContainer.innerHTML = '';
+            sortedActivities.forEach(activity => {
+                const activityElement = document.createElement('div');
+                activityElement.className = 'task-item';
+                
+                const timeText = formatTime(activity.time);
+                const endTime = calculateEndTime(activity.time, activity.duration);
+                
+                activityElement.innerHTML = `
+                    <div class="task-content">
+                        <div class="task-title">${activity.title}</div>
+                        <div class="task-details">
+                            <span><i class="fas fa-tag"></i> ${activity.type.charAt(0).toUpperCase() + activity.type.slice(1)}</span>
+                            <span><i class="fas fa-calendar"></i> ${activity.day.charAt(0).toUpperCase() + activity.day.slice(1)}</span>
+                            <span><i class="fas fa-clock"></i> ${timeText} - ${endTime}</span>
+                            <span><i class="fas fa-hourglass-half"></i> ${activity.duration} minutes</span>
+                            ${activity.location ? `<span><i class="fas fa-map-marker-alt"></i> ${activity.location}</span>` : ''}
+                        </div>
+                        ${activity.notes ? `<p>${activity.notes}</p>` : ''}
+                    </div>
+                    <div class="task-actions">
+                        <button class="btn btn-sm btn-warning edit-non-academic" data-id="${activity.id}"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-sm btn-danger delete-non-academic" data-id="${activity.id}"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                
+                nonAcademicContainer.appendChild(activityElement);
+            });
+            
+            // Add event listeners to non-academic action buttons
+            document.querySelectorAll('.edit-non-academic').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const activityId = btn.dataset.id;
+                    editNonAcademic(activityId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-non-academic').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const activityId = btn.dataset.id;
+                    deleteNonAcademic(activityId);
+                });
+            });
+        }
+
+        // Render task progress
+        function renderTaskProgress() {
+            if (userData.tasks.length === 0) {
+                taskProgressContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-tasks"></i>
+                        <h3>No Tasks with Progress</h3>
+                        <p>Update progress on your tasks to see them here</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Filter tasks that have progress but are not completed
+            const tasksWithProgress = userData.tasks.filter(task => 
+                (task.progress && task.progress > 0) || task.status === 'completed'
+            );
+            
+            if (tasksWithProgress.length === 0) {
+                taskProgressContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-tasks"></i>
+                        <h3>No Tasks with Progress</h3>
+                        <p>Update progress on your tasks to see them here</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            taskProgressContainer.innerHTML = '';
+            tasksWithProgress.forEach(task => {
+                const progressElement = document.createElement('div');
+                progressElement.className = 'task-item';
+                
+                const course = userData.courses.find(c => c.id === task.courseId);
+                const courseName = course ? course.name : 'Unassigned';
+                
+                const progress = task.status === 'completed' ? 100 : (task.progress || 0);
+                
+                progressElement.innerHTML = `
+                    <div class="task-content">
+                        <div class="task-title">${task.title}</div>
+                        <div class="task-details">
+                            <span><i class="fas fa-book"></i> ${courseName}</span>
+                            <span><i class="fas fa-tag"></i> ${task.type}</span>
+                            <span class="task-priority priority-${task.priority}">${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)} Priority</span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${progress}%"></div>
+                            </div>
+                            <div class="progress-text">Progress: ${progress}%</div>
+                        </div>
+                    </div>
+                    <div class="task-actions">
+                        <button class="btn btn-sm btn-primary update-progress" data-id="${task.id}"><i class="fas fa-sync-alt"></i></button>
+                    </div>
+                `;
+                
+                if (task.status === 'completed') {
+                    progressElement.style.opacity = '0.6';
+                    progressElement.style.textDecoration = 'line-through';
+                }
+                
+                taskProgressContainer.appendChild(progressElement);
+            });
+            
+            // Add event listeners to update progress buttons
+            document.querySelectorAll('.update-progress').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const taskId = btn.dataset.id;
+                    updateTaskProgress(taskId);
+                });
+            });
+        }
+
+        // Update task progress
+        function updateTaskProgress(taskId) {
+            const task = userData.tasks.find(t => t.id === taskId);
+            if (!task) return;
+            
+            const newProgress = prompt(`Update progress for "${task.title}" (0-100%):`, task.progress || 0);
+            if (newProgress === null) return;
+            
+            const progressValue = parseInt(newProgress);
+            if (isNaN(progressValue) || progressValue < 0 || progressValue > 100) {
+                alert('Please enter a valid number between 0 and 100.');
+                return;
+            }
+            
+            task.progress = progressValue;
+            if (progressValue === 100) {
+                task.status = 'completed';
+            } else if (task.status === 'completed' && progressValue < 100) {
+                task.status = 'pending';
+            }
+            
+            saveData();
+            renderTasks();
+            renderAllTasks();
+            renderTaskProgress();
+            updateDashboard();
+        }
+
+        // Render calendar
+        function renderCalendar() {
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                               'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            calendarMonth.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+            
+            // Get first day of month and number of days in month
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            
+            // Clear previous calendar
+            calendarDates.innerHTML = '';
+            
+            // Add day headers
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayNames.forEach(day => {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+                calendarDates.appendChild(dayElement);
+            });
+            
+            // Add empty cells for days before the first day of the month
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                calendarDates.appendChild(emptyCell);
+            }
+
+            // Add days of the month
+            for (let date = 1; date <= daysInMonth; date++) {
+                const dateElement = document.createElement('div');
+                dateElement.className = 'calendar-date';
+                dateElement.textContent = date;
+
+                // Highlight current day
+                const today = new Date();
+                if (date === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) {
+                    dateElement.classList.add('current');
+                }
+
+                // Mark dates with tasks
+                const dateHasTask = userData.tasks.some(task => {
+                    const taskDate = new Date(task.dueDate);
+                    return taskDate.getDate() === date &&
+                           taskDate.getMonth() === currentMonth &&
+                           taskDate.getFullYear() === currentYear;
+                });
+                if (dateHasTask) {
+                    dateElement.classList.add('has-tasks');
+                }
+
+                calendarDates.appendChild(dateElement);
+            }
+        }
+
+        // Switch calendar month
+        prevMonthBtn.addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar();
+        });
+
+        nextMonthBtn.addEventListener('click', () => {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar();
+        });
+
+        // Timer functionality
+        function startTimer() {
+            if (timerRunning) return;
+            
+            timerRunning = true;
+            timerStatus.textContent = 'Focusing...';
+            
+            timerInterval = setInterval(() => {
+                if (timerSeconds === 0) {
+                    if (timerMinutes === 0) {
+                        // Timer finished
+                        clearInterval(timerInterval);
+                        timerRunning = false;
+                        timerStatus.textContent = 'Time is up! Take a break.';
+                        
+                        // Play sound if enabled
+                        if (userData.settings.reminderSounds) {
+                            playTimerSound();
+                        }
+                        
+                        // Show notification
+                        showNotification('Focus Timer', 'Your focus session has ended!', 'success');
+                        
+                        return;
+                    }
+                    timerMinutes--;
+                    timerSeconds = 59;
+                } else {
+                    timerSeconds--;
+                }
+                
+                updateTimerDisplay();
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            if (!timerRunning) return;
+            
+            clearInterval(timerInterval);
+            timerRunning = false;
+            timerStatus.textContent = 'Paused';
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            timerMinutes = parseInt(timerDisplay.textContent.split(':')[0]);
+            timerSeconds = 0;
+            updateTimerDisplay();
+            timerStatus.textContent = 'Ready to focus!';
+        }
+
+        function updateTimerDisplay() {
+            const displayMinutes = timerMinutes.toString().padStart(2, '0');
+            const displaySeconds = timerSeconds.toString().padStart(2, '0');
+            timerDisplay.textContent = `${displayMinutes}:${displaySeconds}`;
+        }
+
+        function setTimerPreset(minutes) {
+            timerMinutes = minutes;
+            timerSeconds = 0;
+            updateTimerDisplay();
+            
+            // Update active preset
+            timerPresets.forEach(preset => {
+                if (parseInt(preset.dataset.minutes) === minutes) {
+                    preset.classList.add('active');
+                } else {
+                    preset.classList.remove('active');
+                }
+            });
+        }
+
+        function playTimerSound() {
+            // Create a simple beep sound using Web Audio API
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 1);
+        }
+
+        // Notification system
+        function showNotification(title, message, type = 'info') {
+            const notificationContainer = document.getElementById('notification-container');
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            
+            const icons = {
+                info: 'fas fa-info-circle',
+                success: 'fas fa-check-circle',
+                warning: 'fas fa-exclamation-triangle',
+                error: 'fas fa-exclamation-circle'
+            };
+            
+            notification.innerHTML = `
+                <div class="notification-icon">
+                    <i class="${icons[type] || icons.info}"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+                <button class="notification-close">&times;</button>
+            `;
+            
+            notificationContainer.appendChild(notification);
+            
+            // Show notification with animation
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                closeNotification(notification);
+            }, 5000);
+            
+            // Close on click
+            notification.querySelector('.notification-close').addEventListener('click', () => {
+                closeNotification(notification);
+            });
+        }
+
+        function closeNotification(notification) {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }
+
+        // Reminder checking system
+        function startReminderChecker() {
+            // Check for reminders every 30 seconds
+            reminderCheckInterval = setInterval(checkReminders, 30000);
+        }
+
+        function checkReminders() {
+            const now = new Date();
+            
+            userData.reminders.forEach(reminder => {
+                // Skip if already notified
+                if (reminder.notified) return;
+                
+                const reminderDate = new Date(`${reminder.date}T${reminder.time}`);
+                const remindBefore = reminder.before * 60000; // Convert to milliseconds
+                const reminderTime = new Date(reminderDate.getTime() - remindBefore);
+                
+                // Check if it's time to show the reminder
+                if (now >= reminderTime) {
+                    // Show notification
+                    showNotification('Reminder', reminder.title, 'info');
+                    
+                    // Play sound if enabled
+                    if (userData.settings.reminderSounds) {
+                        playReminderSound();
+                    }
+                    
+                    // Mark as notified
+                    reminder.notified = true;
+                }
+            });
+            
+            saveData();
+        }
+
+        function playReminderSound() {
+            // Create a different sound for reminders
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 600;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1.5);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 1.5);
+        }
+
+        // Show/hide modals
+        function openModal(modal) {
+            modal.style.display = 'flex';
+        }
+
+        function closeModal(modal) {
+            modal.style.display = 'none';
+        }
+
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                closeModal(taskModal);
+                closeModal(courseModal);
+                closeModal(scheduleModal);
+                closeModal(reminderModal);
+                closeModal(examModal);
+                closeModal(classModal);
+                closeModal(nonAcademicModal);
+            });
+        });
+
+        // Handle adding new task
+        function openTaskModal(editMode = false, taskId = null) {
+            const modalTitle = document.getElementById('task-modal-title');
+            const deleteBtn = document.getElementById('delete-task-btn');
+            const progressSlider = document.getElementById('task-progress');
+            const progressText = document.getElementById('task-progress-text');
+            
+            if (editMode && taskId) {
+                modalTitle.textContent = 'Edit Task';
+                deleteBtn.style.display = 'inline-block';
+                
+                const task = userData.tasks.find(t => t.id === taskId);
+                if (task) {
+                    document.getElementById('task-id').value = task.id;
+                    document.getElementById('task-title').value = task.title;
+                    document.getElementById('task-course').value = task.courseId;
+                    document.getElementById('task-type').value = task.type;
+                    document.getElementById('task-priority').value = task.priority;
+                    document.getElementById('task-due-date').value = task.dueDate;
+                    document.getElementById('task-due-time').value = task.dueTime || '';
+                    document.getElementById('task-status').value = task.status;
+                    document.getElementById('task-notes').value = task.notes || '';
+                    progressSlider.value = task.progress || 0;
+                    progressText.textContent = `${task.progress || 0}%`;
+                }
+            } else {
+                modalTitle.textContent = 'Add New Task';
+                deleteBtn.style.display = 'none';
+                document.getElementById('task-id').value = '';
+                document.getElementById('task-form').reset();
+                progressSlider.value = 0;
+                progressText.textContent = '0%';
+            }
+            
+            // Update progress text when slider changes
+            progressSlider.addEventListener('input', () => {
+                progressText.textContent = `${progressSlider.value}%`;
+            });
+            
+            openModal(taskModal);
+        }
+
+        addTaskBtn.addEventListener('click', () => {
+            if (userData.courses.length === 0) {
+                alert('Please add a course first.');
+                return;
+            }
+            openTaskModal();
+        });
+
+        addTaskBtnFull.addEventListener('click', () => {
+            if (userData.courses.length === 0) {
+                alert('Please add a course first.');
+                return;
+            }
+            openTaskModal();
+        });
+
+        addTaskBtnActivities.addEventListener('click', () => {
+            if (userData.courses.length === 0) {
+                alert('Please add a course first.');
+                return;
+            }
+            openTaskModal();
+        });
+
+        taskForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const taskId = document.getElementById('task-id').value;
+            
+            const newTask = {
+                id: taskId || Date.now().toString(),
+                title: document.getElementById('task-title').value,
+                courseId: document.getElementById('task-course').value,
+                type: document.getElementById('task-type').value,
+                priority: document.getElementById('task-priority').value,
+                dueDate: document.getElementById('task-due-date').value,
+                dueTime: document.getElementById('task-due-time').value || null,
+                status: document.getElementById('task-status').value,
+                notes: document.getElementById('task-notes').value,
+                progress: parseInt(document.getElementById('task-progress').value)
+            };
+            
+            if (taskId) {
+                // Update existing task
+                const index = userData.tasks.findIndex(t => t.id === taskId);
+                if (index !== -1) {
+                    userData.tasks[index] = newTask;
+                }
+            } else {
+                // Add new task
+                userData.tasks.push(newTask);
+            }
+            
+            saveData();
+            renderTasks();
+            renderAllTasks();
+            renderTaskProgress();
+            updateDashboard();
+            renderCalendar();
+            closeModal(taskModal);
+            taskForm.reset();
+        });
+
+        document.getElementById('delete-task-btn').addEventListener('click', () => {
+            const taskId = document.getElementById('task-id').value;
+            if (confirm('Are you sure you want to delete this task?')) {
+                deleteTask(taskId);
+                closeModal(taskModal);
+            }
+        });
+
+        // Edit task
+        function editTask(taskId) {
+            openTaskModal(true, taskId);
+        }
+
+        // Delete task
+        function deleteTask(taskId) {
+            if (confirm('Are you sure you want to delete this task?')) {
+                userData.tasks = userData.tasks.filter(t => t.id !== taskId);
+                saveData();
+                renderTasks();
+                renderAllTasks();
+                renderTaskProgress();
+                updateDashboard();
+                renderCalendar();
+            }
+        }
+
+        // Handle adding new course
+        function openCourseModal(editMode = false, courseId = null) {
+            const modalTitle = document.getElementById('course-modal-title');
+            const deleteBtn = document.getElementById('delete-course-btn');
+            
+            if (editMode && courseId) {
+                modalTitle.textContent = 'Edit Course';
+                deleteBtn.style.display = 'inline-block';
+                
+                const course = userData.courses.find(c => c.id === courseId);
+                if (course) {
+                    document.getElementById('course-id').value = course.id;
+                    document.getElementById('course-name').value = course.name;
+                    document.getElementById('course-code').value = course.code;
+                    document.getElementById('course-instructor').value = course.instructor;
+                    document.getElementById('course-subject').value = course.subject;
+                    document.getElementById('course-color').value = course.color;
+                    document.getElementById('course-icon').value = course.icon;
+                }
+            } else {
+                modalTitle.textContent = 'Add New Course';
+                deleteBtn.style.display = 'none';
+                document.getElementById('course-id').value = '';
+                document.getElementById('course-form').reset();
+            }
+            
+            openModal(courseModal);
+        }
+
+        addCourseBtn.addEventListener('click', () => openCourseModal());
+        addCourseBtnFull.addEventListener('click', () => openCourseModal());
+
+        courseForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const courseId = document.getElementById('course-id').value;
+            
+            const newCourse = {
+                id: courseId || Date.now().toString(),
+                name: document.getElementById('course-name').value,
+                code: document.getElementById('course-code').value,
+                instructor: document.getElementById('course-instructor').value,
+                subject: document.getElementById('course-subject').value,
+                color: document.getElementById('course-color').value,
+                icon: document.getElementById('course-icon').value
+            };
+            
+            if (courseId) {
+                // Update existing course
+                const index = userData.courses.findIndex(c => c.id === courseId);
+                if (index !== -1) {
+                    userData.courses[index] = newCourse;
+                }
+            } else {
+                // Add new course
+                userData.courses.push(newCourse);
+            }
+            
+            saveData();
+            renderCourses();
+            renderAllCourses();
+            updateCourseSelect();
+            closeModal(courseModal);
+            courseForm.reset();
+        });
+
+        document.getElementById('delete-course-btn').addEventListener('click', () => {
+            const courseId = document.getElementById('course-id').value;
+            if (confirm('Are you sure you want to delete this course? This will also remove all tasks associated with this course.')) {
+                deleteCourse(courseId);
+                closeModal(courseModal);
+            }
+        });
+
+        // Edit course
+        function editCourse(courseId) {
+            openCourseModal(true, courseId);
+        }
+
+        // Delete course
+        function deleteCourse(courseId) {
+            if (confirm('Are you sure you want to delete this course? This will also remove all tasks associated with this course.')) {
+                userData.courses = userData.courses.filter(c => c.id !== courseId);
+                // Also remove tasks associated with this course
+                userData.tasks = userData.tasks.filter(t => t.courseId !== courseId);
+                saveData();
+                renderCourses();
+                renderAllCourses();
+                renderTasks();
+                renderAllTasks();
+                renderTaskProgress();
+                updateDashboard();
+                updateCourseSelect();
+            }
+        }
+
+        // Handle adding new schedule item
+        function openScheduleModal(editMode = false, scheduleId = null) {
+            const modalTitle = document.getElementById('schedule-modal-title');
+            const deleteBtn = document.getElementById('delete-schedule-btn');
+            
+            if (editMode && scheduleId) {
+                modalTitle.textContent = 'Edit Schedule Item';
+                deleteBtn.style.display = 'inline-block';
+                
+                const schedule = userData.schedule.find(s => s.id === scheduleId);
+                if (schedule) {
+                    document.getElementById('schedule-id').value = schedule.id;
+                    document.getElementById('schedule-title').value = schedule.title;
+                    document.getElementById('schedule-day').value = schedule.day;
+                    document.getElementById('schedule-time').value = schedule.time;
+                    document.getElementById('schedule-duration').value = schedule.duration;
+                    document.getElementById('schedule-type').value = schedule.type;
+                    document.getElementById('schedule-location').value = schedule.location || '';
+                }
+            } else {
+                modalTitle.textContent = 'Add Schedule Item';
+                deleteBtn.style.display = 'none';
+                document.getElementById('schedule-id').value = '';
+                document.getElementById('schedule-form').reset();
+            }
+            
+            openModal(scheduleModal);
+        }
+
+        addScheduleBtn.addEventListener('click', () => openScheduleModal());
+
+        scheduleForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const scheduleId = document.getElementById('schedule-id').value;
+            
+            const newSchedule = {
+                id: scheduleId || Date.now().toString(),
+                title: document.getElementById('schedule-title').value,
+                day: document.getElementById('schedule-day').value,
+                time: document.getElementById('schedule-time').value,
+                duration: parseInt(document.getElementById('schedule-duration').value),
+                type: document.getElementById('schedule-type').value,
+                location: document.getElementById('schedule-location').value || ''
+            };
+            
+            if (scheduleId) {
+                // Update existing schedule
+                const index = userData.schedule.findIndex(s => s.id === scheduleId);
+                if (index !== -1) {
+                    userData.schedule[index] = newSchedule;
+                }
+            } else {
+                // Add new schedule
+                userData.schedule.push(newSchedule);
+            }
+            
+            saveData();
+            renderSchedule();
+            closeModal(scheduleModal);
+            scheduleForm.reset();
+        });
+
+        document.getElementById('delete-schedule-btn').addEventListener('click', () => {
+            const scheduleId = document.getElementById('schedule-id').value;
+            if (confirm('Are you sure you want to delete this schedule item?')) {
+                deleteSchedule(scheduleId);
+                closeModal(scheduleModal);
+            }
+        });
+
+        // Edit schedule
+        function editSchedule(scheduleId) {
+            openScheduleModal(true, scheduleId);
+        }
+
+        // Delete schedule
+        function deleteSchedule(scheduleId) {
+            if (confirm('Are you sure you want to delete this schedule item?')) {
+                userData.schedule = userData.schedule.filter(s => s.id !== scheduleId);
+                saveData();
+                renderSchedule();
+            }
+        }
+
+        // Handle adding new reminder
+        function openReminderModal(editMode = false, reminderId = null) {
+            const modalTitle = document.getElementById('reminder-modal-title');
+            const deleteBtn = document.getElementById('delete-reminder-btn');
+            
+            if (editMode && reminderId) {
+                modalTitle.textContent = 'Edit Reminder';
+                deleteBtn.style.display = 'inline-block';
+                
+                const reminder = userData.reminders.find(r => r.id === reminderId);
+                if (reminder) {
+                    document.getElementById('reminder-id').value = reminder.id;
+                    document.getElementById('reminder-title').value = reminder.title;
+                    document.getElementById('reminder-description').value = reminder.description || '';
+                    document.getElementById('reminder-date').value = reminder.date;
+                    document.getElementById('reminder-time').value = reminder.time;
+                    document.getElementById('reminder-priority').value = reminder.priority;
+                    document.getElementById('reminder-before').value = reminder.before;
+                }
+            } else {
+                modalTitle.textContent = 'Add Reminder';
+                deleteBtn.style.display = 'none';
+                document.getElementById('reminder-id').value = '';
+                document.getElementById('reminder-form').reset();
+            }
+            
+            openModal(reminderModal);
+        }
+
+        addReminderBtn.addEventListener('click', () => openReminderModal());
+
+        reminderForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const reminderId = document.getElementById('reminder-id').value;
+            
+            const newReminder = {
+                id: reminderId || Date.now().toString(),
+                title: document.getElementById('reminder-title').value,
+                description: document.getElementById('reminder-description').value,
+                date: document.getElementById('reminder-date').value,
+                time: document.getElementById('reminder-time').value,
+                priority: document.getElementById('reminder-priority').value,
+                before: parseInt(document.getElementById('reminder-before').value),
+                notified: false
+            };
+            
+            if (reminderId) {
+                // Update existing reminder
+                const index = userData.reminders.findIndex(r => r.id === reminderId);
+                if (index !== -1) {
+                    userData.reminders[index] = newReminder;
+                }
+            } else {
+                // Add new reminder
+                userData.reminders.push(newReminder);
+            }
+            
+            saveData();
+            renderReminders();
+            closeModal(reminderModal);
+            reminderForm.reset();
+        });
+
+        document.getElementById('delete-reminder-btn').addEventListener('click', () => {
+            const reminderId = document.getElementById('reminder-id').value;
+            if (confirm('Are you sure you want to delete this reminder?')) {
+                deleteReminder(reminderId);
+                closeModal(reminderModal);
+            }
+        });
+
+        // Edit reminder
+        function editReminder(reminderId) {
+            openReminderModal(true, reminderId);
+        }
+
+        // Delete reminder
+        function deleteReminder(reminderId) {
+            if (confirm('Are you sure you want to delete this reminder?')) {
+                userData.reminders = userData.reminders.filter(r => r.id !== reminderId);
+                saveData();
+                renderReminders();
+            }
+        }
+
+        // Handle adding new exam
+        function openExamModal(editMode = false, examId = null) {
+            const modalTitle = document.getElementById('exam-modal-title');
+            const deleteBtn = document.getElementById('delete-exam-btn');
+            
+            if (editMode && examId) {
+                modalTitle.textContent = 'Edit Exam';
+                deleteBtn.style.display = 'inline-block';
+                
+                const exam = userData.exams.find(e => e.id === examId);
+                if (exam) {
+                    document.getElementById('exam-id').value = exam.id;
+                    document.getElementById('exam-title').value = exam.title;
+                    document.getElementById('exam-course').value = exam.courseId;
+                    document.getElementById('exam-date').value = exam.date;
+                    document.getElementById('exam-time').value = exam.time;
+                    document.getElementById('exam-duration').value = exam.duration;
+                    document.getElementById('exam-location').value = exam.location || '';
+                    document.getElementById('exam-notes').value = exam.notes || '';
+                }
+            } else {
+                modalTitle.textContent = 'Add Exam';
+                deleteBtn.style.display = 'none';
+                document.getElementById('exam-id').value = '';
+                document.getElementById('exam-form').reset();
+            }
+            
+            openModal(examModal);
+        }
+
+        addExamBtn.addEventListener('click', () => {
+            if (userData.courses.length === 0) {
+                alert('Please add a course first.');
+                return;
+            }
+            openExamModal();
+        });
+
+        examForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const examId = document.getElementById('exam-id').value;
+            
+            const newExam = {
+                id: examId || Date.now().toString(),
+                title: document.getElementById('exam-title').value,
+                courseId: document.getElementById('exam-course').value,
+                date: document.getElementById('exam-date').value,
+                time: document.getElementById('exam-time').value,
+                duration: parseInt(document.getElementById('exam-duration').value),
+                location: document.getElementById('exam-location').value || '',
+                notes: document.getElementById('exam-notes').value || ''
+            };
+            
+            if (examId) {
+                // Update existing exam
+                const index = userData.exams.findIndex(e => e.id === examId);
+                if (index !== -1) {
+                    userData.exams[index] = newExam;
+                }
+            } else {
+                // Add new exam
+                userData.exams.push(newExam);
+            }
+            
+            saveData();
+            renderExams();
+            closeModal(examModal);
+            examForm.reset();
+        });
+
+        document.getElementById('delete-exam-btn').addEventListener('click', () => {
+            const examId = document.getElementById('exam-id').value;
+            if (confirm('Are you sure you want to delete this exam?')) {
+                deleteExam(examId);
+                closeModal(examModal);
+            }
+        });
+
+        // Edit exam
+        function editExam(examId) {
+            openExamModal(true, examId);
+        }
+
+        // Delete exam
+        function deleteExam(examId) {
+            if (confirm('Are you sure you want to delete this exam?')) {
+                userData.exams = userData.exams.filter(e => e.id !== examId);
+                saveData();
+                renderExams();
+            }
+        }
+
+        // Handle adding new class
+        function openClassModal(editMode = false, classId = null) {
+            const modalTitle = document.getElementById('class-modal-title');
+            const deleteBtn = document.getElementById('delete-class-btn');
+            
+            if (editMode && classId) {
+                modalTitle.textContent = 'Edit Class';
+                deleteBtn.style.display = 'inline-block';
+                
+                const classItem = userData.classes.find(c => c.id === classId);
+                if (classItem) {
+                    document.getElementById('class-id').value = classItem.id;
+                    document.getElementById('class-title').value = classItem.title;
+                    document.getElementById('class-course').value = classItem.courseId;
+                    document.getElementById('class-day').value = classItem.day;
+                    document.getElementById('class-time').value = classItem.time;
+                    document.getElementById('class-duration').value = classItem.duration;
+                    document.getElementById('class-location').value = classItem.location || '';
+                    document.getElementById('class-instructor').value = classItem.instructor || '';
+                }
+            } else {
+                modalTitle.textContent = 'Add Class';
+                deleteBtn.style.display = 'none';
+                document.getElementById('class-id').value = '';
+                document.getElementById('class-form').reset();
+            }
+            
+            openModal(classModal);
+        }
+
+        addClassBtn.addEventListener('click', () => {
+            if (userData.courses.length === 0) {
+                alert('Please add a course first.');
+                return;
+            }
+            openClassModal();
+        });
+
+        classForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const classId = document.getElementById('class-id').value;
+            
+            const newClass = {
+                id: classId || Date.now().toString(),
+                title: document.getElementById('class-title').value,
+                courseId: document.getElementById('class-course').value,
+                day: document.getElementById('class-day').value,
+                time: document.getElementById('class-time').value,
+                duration: parseInt(document.getElementById('class-duration').value),
+                location: document.getElementById('class-location').value || '',
+                instructor: document.getElementById('class-instructor').value || ''
+            };
+            
+            if (classId) {
+                // Update existing class
+                const index = userData.classes.findIndex(c => c.id === classId);
+                if (index !== -1) {
+                    userData.classes[index] = newClass;
+                }
+            } else {
+                // Add new class
+                userData.classes.push(newClass);
+            }
+            
+            saveData();
+            renderClasses();
+            closeModal(classModal);
+            classForm.reset();
+        });
+
+        document.getElementById('delete-class-btn').addEventListener('click', () => {
+            const classId = document.getElementById('class-id').value;
+            if (confirm('Are you sure you want to delete this class?')) {
+                deleteClass(classId);
+                closeModal(classModal);
+            }
+        });
+
+        // Edit class
+        function editClass(classId) {
+            openClassModal(true, classId);
+        }
+
+        // Delete class
+        function deleteClass(classId) {
+            if (confirm('Are you sure you want to delete this class?')) {
+                userData.classes = userData.classes.filter(c => c.id !== classId);
+                saveData();
+                renderClasses();
+            }
+        }
+
+        // Handle adding new non-academic activity
+        function openNonAcademicModal(editMode = false, activityId = null) {
+            const modalTitle = document.getElementById('non-academic-modal-title');
+            const deleteBtn = document.getElementById('delete-non-academic-btn');
+            
+            if (editMode && activityId) {
+                modalTitle.textContent = 'Edit Non-Academic Activity';
+                deleteBtn.style.display = 'inline-block';
+                
+                const activity = userData.nonAcademic.find(a => a.id === activityId);
+                if (activity) {
+                    document.getElementById('non-academic-id').value = activity.id;
+                    document.getElementById('non-academic-title').value = activity.title;
+                    document.getElementById('non-academic-type').value = activity.type;
+                    document.getElementById('non-academic-day').value = activity.day;
+                    document.getElementById('non-academic-time').value = activity.time;
+                    document.getElementById('non-academic-duration').value = activity.duration;
+                    document.getElementById('non-academic-location').value = activity.location || '';
+                    document.getElementById('non-academic-notes').value = activity.notes || '';
+                }
+            } else {
+                modalTitle.textContent = 'Add Non-Academic Activity';
+                deleteBtn.style.display = 'none';
+                document.getElementById('non-academic-id').value = '';
+                document.getElementById('non-academic-form').reset();
+            }
+            
+            openModal(nonAcademicModal);
+        }
+
+        addNonAcademicBtn.addEventListener('click', () => openNonAcademicModal());
+
+        nonAcademicForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const activityId = document.getElementById('non-academic-id').value;
+            
+            const newActivity = {
+                id: activityId || Date.now().toString(),
+                title: document.getElementById('non-academic-title').value,
+                type: document.getElementById('non-academic-type').value,
+                day: document.getElementById('non-academic-day').value,
+                time: document.getElementById('non-academic-time').value,
+                duration: parseInt(document.getElementById('non-academic-duration').value),
+                location: document.getElementById('non-academic-location').value || '',
+                notes: document.getElementById('non-academic-notes').value || ''
+            };
+            
+            if (activityId) {
+                // Update existing activity
+                const index = userData.nonAcademic.findIndex(a => a.id === activityId);
+                if (index !== -1) {
+                    userData.nonAcademic[index] = newActivity;
+                }
+            } else {
+                // Add new activity
+                userData.nonAcademic.push(newActivity);
+            }
+            
+            saveData();
+            renderNonAcademic();
+            closeModal(nonAcademicModal);
+            nonAcademicForm.reset();
+        });
+
+        document.getElementById('delete-non-academic-btn').addEventListener('click', () => {
+            const activityId = document.getElementById('non-academic-id').value;
+            if (confirm('Are you sure you want to delete this activity?')) {
+                deleteNonAcademic(activityId);
+                closeModal(nonAcademicModal);
+            }
+        });
+
+        // Edit non-academic activity
+        function editNonAcademic(activityId) {
+            openNonAcademicModal(true, activityId);
+        }
+
+        // Delete non-academic activity
+        function deleteNonAcademic(activityId) {
+            if (confirm('Are you sure you want to delete this activity?')) {
+                userData.nonAcademic = userData.nonAcademic.filter(a => a.id !== activityId);
+                saveData();
+                renderNonAcademic();
+            }
+        }
+
+        // Activities tab switching
+        activityTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Update active tab
+                activityTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Show corresponding content
+                const tabName = tab.dataset.tab;
+                activityContents.forEach(content => {
+                    if (content.id.startsWith(tabName)) {
+                        content.style.display = 'block';
+                    } else {
+                        content.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Timer event listeners
+        startTimerBtn.addEventListener('click', startTimer);
+        pauseTimerBtn.addEventListener('click', pauseTimer);
+        resetTimerBtn.addEventListener('click', resetTimer);
+
+        timerPresets.forEach(preset => {
+            preset.addEventListener('click', () => {
+                setTimerPreset(parseInt(preset.dataset.minutes));
+            });
+        });
+
+        // Settings functionality
+        function loadSettings() {
+            // Load profile settings
+            profileNameInput.value = profileName.textContent;
+            profileMajorInput.value = profileMajor.textContent;
+            
+            // Load notification settings
+            taskRemindersToggle.checked = userData.settings.taskReminders;
+            scheduleAlertsToggle.checked = userData.settings.scheduleAlerts;
+            reminderSoundsToggle.checked = userData.settings.reminderSounds;
+            
+            // Load theme settings
+            themeSelect.value = userData.settings.theme;
+        }
+
+        saveProfileBtn.addEventListener('click', () => {
+            profileName.textContent = profileNameInput.value;
+            profileMajor.textContent = profileMajorInput.value;
+            userName.textContent = profileNameInput.value;
+            
+            // Save to userData
+            userData.settings.profileName = profileNameInput.value;
+            userData.settings.profileMajor = profileMajorInput.value;
+            userData.settings.profileEmail = profileEmailInput.value;
+            
+            saveData();
+            alert('Profile saved successfully!');
+        });
+
+        // Save notification settings when toggles change
+        taskRemindersToggle.addEventListener('change', () => {
+            userData.settings.taskReminders = taskRemindersToggle.checked;
+            saveData();
+        });
+
+        scheduleAlertsToggle.addEventListener('change', () => {
+            userData.settings.scheduleAlerts = scheduleAlertsToggle.checked;
+            saveData();
+        });
+
+        reminderSoundsToggle.addEventListener('change', () => {
+            userData.settings.reminderSounds = reminderSoundsToggle.checked;
+            saveData();
+        });
+
+        // Save theme settings
+        themeSelect.addEventListener('change', () => {
+            userData.settings.theme = themeSelect.value;
+            saveData();
+            applyTheme(userData.settings.theme);
+        });
+
+        // Apply theme
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.body.style.backgroundColor = '#1a1a1a';
+                document.body.style.color = '#f8f9fa';
+            } else {
+                document.body.style.backgroundColor = '#f5f7ff';
+                document.body.style.color = '#212529';
+            }
+        }
+
+        // Export data
+        exportDataBtn.addEventListener('click', () => {
+            const dataStr = JSON.stringify(userData, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = 'mystudytask_data.json';
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        });
+
+        // Import data
+        importDataBtn.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = e => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(event) {
+                    try {
+                        const importedData = JSON.parse(event.target.result);
+                        userData = importedData;
+                        saveData();
+                        initApp();
+                        alert('Data imported successfully!');
+                    } catch (error) {
+                        alert('Error importing data. Please make sure you selected a valid backup file.');
+                    }
+                };
+                
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        });
+
+        // Reset data
+        resetDataBtn.addEventListener('click', () => {
+            if (confirm('Are you sure you want to reset all data? This action cannot be undone.')) {
+                userData = {
+                    tasks: [],
+                    courses: [],
+                    schedule: [],
+                    reminders: [],
+                    exams: [],
+                    classes: [],
+                    nonAcademic: [],
+                    settings: {
+                        taskReminders: true,
+                        scheduleAlerts: true,
+                        reminderSounds: true,
+                        theme: 'light'
+                    }
+                };
+                saveData();
+                initApp();
+                alert('All data has been reset.');
+            }
+        });
+
+        // Role switching
+        studentBtn.addEventListener('click', () => {
+            studentBtn.classList.add('active');
+            instructorBtn.classList.remove('active');
+            profileRole.textContent = 'Student';
+            userIcon.className = 'fas fa-user-graduate';
+        });
+
+        instructorBtn.addEventListener('click', () => {
+            instructorBtn.classList.add('active');
+            studentBtn.classList.remove('active');
+            profileRole.textContent = 'Instructor';
+            userIcon.className = 'fas fa-chalkboard-teacher';
+        });
+
+        // Login handling
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const role = studentBtn.classList.contains('active') ? 'Student' : 'Instructor';
+            const name = document.getElementById('email').value.split('@')[0]; // Temporary placeholder
+            profileName.textContent = name.charAt(0).toUpperCase() + name.slice(1);
+            profileMajor.textContent = role === 'Student' ? 'Your Major' : 'Instructor';
+            userInfo.style.display = 'inline-block';
+            userName.textContent = profileName.textContent;
+            loginSection.style.display = 'none';
+            mainApp.style.display = 'block';
+            initApp();
+        });
+
+        // Logout handling
+        logoutBtn.addEventListener('click', () => {
+            loginSection.style.display = 'flex';
+            mainApp.style.display = 'none';
+        });
+
+        // Navigation switching
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+
+                const target = link.dataset.target;
+                contentSections.forEach(section => {
+                    section.style.display = section.id.startsWith(target) ? 'block' : 'none';
+                });
+            });
+        });
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Already set up above
+        }
+
+        // Initialize the app on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Empty, waits for user login
+        });
+    </script>
+</body>
+</html>
